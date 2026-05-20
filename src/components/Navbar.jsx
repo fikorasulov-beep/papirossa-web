@@ -31,18 +31,22 @@ export default function Navbar() {
     return () => document.removeEventListener("click", handler);
   }, [langOpen]);
 
-  const handleLangBtn = (e) => {
-    e.stopPropagation();
-    if (!langOpen && langBtnRef.current) {
-      const rect = langBtnRef.current.getBoundingClientRect();
-      const dropW = 155;
-      let left = rect.right - dropW;
-      if (left < 8) left = 8;
-      if (left + dropW > window.innerWidth - 8) left = window.innerWidth - dropW - 8;
-      setLangPos({ top: rect.bottom + 4, left });
-    }
-    setLangOpen((o) => !o);
-  };
+ const handleLangBtn = (e) => {
+  e.stopPropagation();
+  if (!langOpen && langBtnRef.current) {
+    const rect = langBtnRef.current.getBoundingClientRect();
+    const dropW = 155;
+    const dropH = 140; // approximate dropdown height
+    let left = rect.right - dropW;
+    if (left < 8) left = 8;
+    if (left + dropW > window.innerWidth - 8) left = window.innerWidth - dropW - 8;
+    // If not enough space below, open upward
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const top = spaceBelow >= dropH + 16 ? rect.bottom + 4 : rect.top - dropH - 4;
+    setLangPos({ top, left });
+  }
+  setLangOpen((o) => !o);
+};
 
   const pickLang = (e, code) => {
     e.preventDefault();
