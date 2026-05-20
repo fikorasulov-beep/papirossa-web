@@ -2037,6 +2037,19 @@ body.dark-theme .gallery-section .section-title {
   color: #666;
 }
 
+ .hero-section .buttons {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 12px;
+  }
+  .hero-section .buttons .button {
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+
 @media (max-width: 480px) {
   .age-modal {
     padding: 32px 24px;
