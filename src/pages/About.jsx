@@ -7,7 +7,7 @@ export default function About() {
       <div className="section-content">
         <div className="about-image-wrapper">
           <img
-            src="/images/gallery-1.jpg"
+            src="images/gallery-1.jpg"
             alt="About Papirossa"
             className="about-image"
           />
