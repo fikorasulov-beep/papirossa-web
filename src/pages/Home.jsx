@@ -28,7 +28,7 @@ export default function Home() {
         </div>
         <div className="hero-image-wrapper">
           <img
-            src="/images/hero-tobacco.jpg"
+            src="images/hero-tobacco.jpg"
             alt="Premium tobacco"
             className="hero-image"
           />
