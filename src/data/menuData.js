@@ -16,7 +16,7 @@ const menuData = [
       az: "Dünyanın ən ikonik siqareti. Zəngin, dolğun dad və yumşaq son notla. Əsl tütün sevərlərin klassik seçimi.",
     },
     price: "$8.50",
-    image: "/images/marlboro.jpg",
+    image: "images/marlboro.jpg",
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ const menuData = [
       az: "Daha yüngül və yumşaq dadlı zərif qarışıq. Winston Blue ardıcıl keyfiyyətlə balanslaşdırılmış siqaret təcrübəsi təqdim edir.",
     },
     price: "$7.90",
-    image: "/images/winston.jpg",
+    image: "images/winston.jpg",
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ const menuData = [
       az: "Kubanın ən yaxşı premium siqarı. Sidr, krem və torpaq zəngin dadları. Tələbkar həvəskarlar üçün şah əsər.",
     },
     price: "$38.00",
-    image: "/images/cohiba.jpg",
+    image: "images/cohiba.jpg",
   },
   {
     id: 4,
@@ -53,7 +53,7 @@ const menuData = [
       az: "Zəngin, uzunmüddətli dadlı premium kəlyan tütünü. İkiqat alma, nərvə, qarpız və üzüm ətirli növləri mövcuddur.",
     },
     price: "$15.00",
-    image: "/images/hookah.jpg",
+    image: "images/hookah.jpg",
   },
   {
     id: 5,
@@ -68,7 +68,7 @@ const menuData = [
       az: "Əfsanəvi küləkdən qorunan alışqan. İkonik açılan qapaq dizaynı ilə ömür boyu davam etmək üçün hazırlanıb. Doldurula bilən.",
     },
     price: "$29.00",
-    image: "/images/zippo.jpg",
+    image: "images/zippo.jpg",
   },
   {
     id: 6,
@@ -83,7 +83,7 @@ const menuData = [
       az: "Yumşaq, təbii şirin vanil-krem aromalı sevimli Amerika qarışığı. Həm yeni başlayanlar, həm də təcrübəli çubuq sevənlər üçün idealdır.",
     },
     price: "$19.50",
-    image: "/images/pipe.jpg",
+    image: "images/pipe.jpg",
   },
   {
     id: 7,
@@ -94,7 +94,7 @@ const menuData = [
       az: "Dünyanın ən çox satılan Kuba siqarı. Kofe, qoz-fındıq notları ilə orta gövdəli. İstənilən mərasim üçün zərif seçim.",
     },
     price: "$24.00",
-    image: "/images/montecristo.jpg",
+    image: "images/montecristo.jpg",
   },
   {
     id: 8,
@@ -109,7 +109,7 @@ const menuData = [
       az: "Intensiv dadları və əla bulud istehsalı ilə tanınan premium Amerika kəlyan tütünü. Ambrosia, White Gummy Bear və Citrus Mint növlərində mövcuddur.",
     },
     price: "$17.50",
-    image: "/images/fumari.jpg",
+    image: "images/fumari.jpg",
   },
 ];
 
