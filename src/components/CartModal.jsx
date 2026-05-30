@@ -1,15 +1,7 @@
 import { useState, useEffect } from "react";
 import { useApp, showToast } from "../context/AppContext.jsx";
-
-/*
- * Telegram Order Bot:
- * Set your bot token and chat ID below. To get them:
- *  1. Open Telegram and message @BotFather → /newbot to get the token.
- *  2. Send any message to your new bot, then visit:
- *     https://api.telegram.org/bot<TOKEN>/getUpdates to find your chat id.
- */
-const BOT_TOKEN = "YOUR_BOT_TOKEN_HERE";
-const CHAT_ID = "YOUR_CHAT_ID_HERE";
+import PayPalButton from "./PayPalButton.jsx";
+import { TELEGRAM_BOT_TOKEN as BOT_TOKEN, TELEGRAM_CHAT_ID as CHAT_ID } from "../config.js";
 
 export default function CartModal() {
   const { isCartOpen, closeCart, cart, removeFromCart, clearCart, cartTotal, t, lang } = useApp();
@@ -180,7 +172,7 @@ export default function CartModal() {
             <form id="order-form" onSubmit={submitOrder} noValidate>
               <input
                 type="text"
-                placeholder="Your Name"
+                placeholder={t("your_name", "Your Name")}
                 required
                 className={"form-input" + (errors.name ? " input-error" : "")}
                 value={name}
@@ -192,7 +184,7 @@ export default function CartModal() {
               {errors.name && <span className="field-error-msg">{errors.name}</span>}
               <input
                 type="tel"
-                placeholder="Your Phone"
+                placeholder={t("your_phone", "Your Phone")}
                 required
                 className={"form-input" + (errors.phone ? " input-error" : "")}
                 value={phone}
@@ -203,9 +195,36 @@ export default function CartModal() {
               />
               {errors.phone && <span className="field-error-msg">{errors.phone}</span>}
               <button type="submit" className="button confirm-btn">
-                {t("confirm_order_button", "Confirm Order")}
+                {t("confirm_telegram_button", "Send via Telegram")}
               </button>
             </form>
+
+            <div className="checkout-divider">
+              <span>{t("or_pay_with", "or pay with")}</span>
+            </div>
+
+            <PayPalButton
+              amount={parseFloat(cartTotal)}
+              description={`Papirossa order — ${cart.length} item(s)`}
+              onSuccess={(details) => {
+                showToast(
+                  lang === "ru"
+                    ? `✅ Оплата прошла успешно!`
+                    : lang === "az"
+                      ? `✅ Ödəniş uğurla tamamlandı!`
+                      : `✅ Payment completed!${details?.demo ? " (demo mode)" : ""}`,
+                  "success"
+                );
+                clearCart();
+                closeCart();
+              }}
+              onError={(err) => {
+                showToast(
+                  (lang === "ru" ? "Ошибка PayPal: " : "PayPal error: ") + (err?.message || ""),
+                  "error"
+                );
+              }}
+            />
           </div>
         )}
       </div>
