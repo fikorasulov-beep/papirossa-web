@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
 import { useApp } from "../context/AppContext.jsx";
 import galleryData from "../data/galleryData.js";
+import { GallerySkeleton } from "../components/Skeleton.jsx";
 
 export default function Gallery() {
   const { t } = useApp();
   const [lightboxSrc, setLightboxSrc] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (lightboxSrc) document.body.style.overflow = "hidden";
@@ -19,18 +26,22 @@ export default function Gallery() {
       <section className="gallery-section" id="gallery">
         <h2 className="section-title">{t("gallery_title", "Gallery")}</h2>
         <div className="section-content">
-          <ul className="gallery-list" id="gallery-container">
-            {galleryData.map((item, i) => (
-              <li className="gallery-item" key={i}>
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className="gallery-image"
-                  onClick={() => setLightboxSrc(item.src)}
-                />
-              </li>
-            ))}
-          </ul>
+          {loading ? (
+            <GallerySkeleton count={6} />
+          ) : (
+            <ul className="gallery-list" id="gallery-container">
+              {galleryData.map((item, i) => (
+                <li className="gallery-item" key={i}>
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    className="gallery-image"
+                    onClick={() => setLightboxSrc(item.src)}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
 
