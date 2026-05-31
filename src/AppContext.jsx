@@ -1,121 +1,54 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { i18n } from "../data/i18n.js";
-import menuData from "../data/menuData.js";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import Navbar from "./components/Navbar.jsx";
+import Footer from "./components/Footer.jsx";
+import CartModal from "./components/CartModal.jsx";
+import AgeModal from "./components/AgeModal.jsx";
+import Toast from "./components/Toast.jsx";
 
-const AppContext = createContext(null);
+import Home from "./pages/Home.jsx";
+import About from "./pages/About.jsx";
+import Menu from "./pages/Menu.jsx";
+import ProductDetails from "./pages/ProductDetails.jsx";
+import Testimonials from "./pages/Testimonials.jsx";
+import Gallery from "./pages/Gallery.jsx";
+import Contact from "./pages/Contact.jsx";
+import Documentation from "./pages/Documentation.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
-export function AppProvider({ children }) {
-  // ---------- Language ----------
-  const [lang, setLang] = useState(() => localStorage.getItem("selectedLang") || "en");
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
-  const setLanguage = useCallback((next) => {
-    setLang(next);
-    localStorage.setItem("selectedLang", next);
-  }, []);
+export default function App() {
+  const location = useLocation();
+  const isDocPage = location.pathname === "/documentation";
 
-  const t = useCallback(
-    (key, fallback = "") => (i18n[lang] && i18n[lang][key]) || fallback || key,
-    [lang]
+  return (
+    <>
+      <ScrollToTop />
+      {!isDocPage && <Navbar />}
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/products" element={<ProductDetails />} />
+          <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/documentation" element={<Documentation />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      {!isDocPage && <Footer />}
+      <CartModal />
+      <AgeModal />
+      <Toast />
+    </>
   );
-
-  // ---------- Theme ----------
-  const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
-  useEffect(() => {
-    if (theme === "dark") document.body.classList.add("dark-theme");
-    else document.body.classList.remove("dark-theme");
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = useCallback(() => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  }, []);
-
-  // ---------- Cart ----------
-  const [cart, setCart] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("papirossa_cart")) || [];
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem("papirossa_cart", JSON.stringify(cart));
-  }, [cart]);
-
-  const addToCart = useCallback(
-    (productId) => {
-      const item = menuData.find((p) => p.id === productId);
-      if (!item) return;
-      const displayName = typeof item.name === "object" ? item.name[lang] : item.name;
-      setCart((prev) => [...prev, { ...item, displayName }]);
-      const toastMsg = {
-        en: `✅ "${displayName}" added to cart!`,
-        ru: `✅ "${displayName}" добавлен в корзину!`,
-        az: `✅ "${displayName}" səbətə əlavə edildi!`,
-      };
-      showToast(toastMsg[lang] || toastMsg.en, "success");
-    },
-    [lang]
-  );
-
-  const removeFromCart = useCallback((index) => {
-    setCart((prev) => prev.filter((_, i) => i !== index));
-  }, []);
-
-  const clearCart = useCallback(() => setCart([]), []);
-
-  const cartTotal = cart
-    .reduce((sum, item) => {
-      const priceStr = typeof item.price === "string" ? item.price : `$${item.price}`;
-      return sum + (parseFloat(priceStr.replace("$", "")) || 0);
-    }, 0)
-    .toFixed(2);
-
-  // ---------- Cart modal ----------
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const openCart = useCallback(() => setIsCartOpen(true), []);
-  const closeCart = useCallback(() => setIsCartOpen(false), []);
-
-  // ---------- Body overflow when modals open ----------
-  useEffect(() => {
-    document.body.style.overflow = isCartOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isCartOpen]);
-
-  const value = {
-    lang,
-    setLanguage,
-    t,
-    theme,
-    toggleTheme,
-    cart,
-    addToCart,
-    removeFromCart,
-    clearCart,
-    cartTotal,
-    isCartOpen,
-    openCart,
-    closeCart,
-  };
-
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
-}
-
-export function useApp() {
-  const ctx = useContext(AppContext);
-  if (!ctx) throw new Error("useApp must be used within AppProvider");
-  return ctx;
-}
-
-// ---------- Toast helper (simple global pub/sub) ----------
-const toastListeners = new Set();
-export function showToast(message, type = "success") {
-  toastListeners.forEach((fn) => fn({ message, type, id: Date.now() + Math.random() }));
-}
-export function subscribeToast(fn) {
-  toastListeners.add(fn);
-  return () => toastListeners.delete(fn);
 }
